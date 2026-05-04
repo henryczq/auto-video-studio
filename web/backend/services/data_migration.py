@@ -17,7 +17,7 @@ DATA_DIR = ROOT_DIR / "data"
 BACKUPS_DIR = DATA_DIR / "backups"
 MIGRATION_LOG = DATA_DIR / "migration.log"
 
-ACCOUNTS_FILE = ROOT_DIR / "config" / "social_upload_accounts.json"
+ACCOUNTS_FILE = ROOT_DIR / "data" / "social_upload_accounts.json"
 UPLOAD_RECORDS_FILE = ROOT_DIR / "logs" / "social_upload" / "upload_records.json"
 
 
