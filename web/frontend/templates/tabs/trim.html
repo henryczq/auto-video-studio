@@ -1,0 +1,99 @@
+        <div id="tab-trim" class="tab-content">
+            <div class="card">
+                <h2>视频裁剪</h2>
+                <div class="help-panel" style="background:#fff3e0; border-color:#ffb74d;">
+                    <strong>原声路线：</strong>视频处理 → 字幕编辑 → 视频裁剪 → 视频合成<br>
+                    <strong>注意：</strong>在"字幕编辑"页标记要删除的片段后，在这里确认并执行裁剪。裁剪后会重新计算字幕时间轴，TTS 相关文件将失效。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>选择任务</label>
+                        <select id="trim-job-select"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>当前版本信息</h3>
+                <div id="trim-source-info" class="field-note">请先选择一个任务</div>
+                <div id="trim-video-preview" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="card">
+                <h3>待删除片段列表</h3>
+                <div id="trim-cut-list">
+                    <p style="color:#999;">暂无标记要删除的片段</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>手动录入删除时间段</h3>
+                <div class="help-panel" style="background:#f7fbff; border-color:#b8daff;">
+                    可直接输入要从视频中删除的时间段。支持 <code>mm:ss</code>、<code>hh:mm:ss</code> 或秒数，例如 <code>1:23</code>、<code>00:01:23.5</code>、<code>83.5</code>。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>开始时间</label>
+                        <input type="text" id="manual-trim-start" placeholder="例如 1:23">
+                    </div>
+                    <div class="form-group">
+                        <label>结束时间</label>
+                        <input type="text" id="manual-trim-end" placeholder="例如 1:35">
+                    </div>
+                    <div class="form-group" style="display:flex; align-items:flex-end;">
+                        <button class="btn btn-primary" id="manual-trim-add-btn">添加时间段</button>
+                    </div>
+                </div>
+                <div id="manual-trim-list">
+                    <p style="color:#999;">暂无手动时间段</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>按时间保留一段视频</h3>
+                <div class="help-panel" style="background:#f6fbf6; border-color:#a7d9b0;">
+                    适合先做一次粗剪，例如 5 分钟视频只保留 <code>0:40</code> 到 <code>2:10</code>。点击后会自动把这段之外的前后内容加入“手动录入删除时间段”，你再继续微调和生成裁剪后视频。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>保留开始时间</label>
+                        <input type="text" id="keep-range-start" placeholder="例如 0:40">
+                    </div>
+                    <div class="form-group">
+                        <label>保留结束时间</label>
+                        <input type="text" id="keep-range-end" placeholder="例如 2:10">
+                    </div>
+                    <div class="form-group" style="display:flex; align-items:flex-end;">
+                        <button class="btn btn-warning" id="keep-range-apply-btn">生成粗剪范围</button>
+                    </div>
+                </div>
+                <div class="field-note" id="keep-range-note">会保留这段内容，自动删除前后部分；字幕删除标记不会自动清空。</div>
+            </div>
+
+            <div class="card">
+                <h3>裁剪预览汇总</h3>
+                <div id="trim-preview-summary">
+                    <table style="width:auto; border:none;">
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>待删除片段数：</strong></td><td id="trim-cut-count" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>合计删除时长：</strong></td><td id="trim-cut-duration" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>原视频时长：</strong></td><td id="trim-original-duration" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>裁剪后预计时长：</strong></td><td id="trim-remaining-duration" style="padding:5px 0; color:#2e7d32; font-weight:bold;">-</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>将被保留的字幕</h3>
+                <div id="trim-keep-captions" style="max-height:300px; overflow-y:auto;">
+                    <p style="color:#999;">暂无数据</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="trim-preview-btn">刷新预览</button>
+                <button class="btn btn-success" id="trim-save-manual-btn">保存手动时间段</button>
+                <button class="btn btn-success" id="trim-execute-btn">生成裁剪后视频</button>
+                <button class="btn btn-secondary" id="trim-clear-btn">清除所有删除标记</button>
+            </div>
+            <div id="trim-result" style="margin-top:15px;"></div>
+        </div>

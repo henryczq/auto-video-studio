@@ -1,0 +1,72 @@
+        <div id="tab-captions" class="tab-content">
+            <div class="card">
+                <h2>字幕编辑</h2>
+                <div class="help-panel" style="background:#e8f5e9; border-color:#4caf50; margin-bottom:15px;">
+                    <strong>提示：</strong>在这里标记要删除的字幕片段后，点击"保存裁剪标记"，然后到"视频裁剪"页执行真正的裁剪操作。
+                </div>
+                <div class="form-row captions-toolbar">
+                    <div class="form-group">
+                        <label>选择任务</label>
+                        <select id="caption-job-select"></select>
+                    </div>
+                    <div class="form-group captions-toolbar-actions">
+                        <button class="btn btn-secondary" id="apply-terms-btn">应用词库</button>
+                        <button class="btn btn-secondary" id="generate-suggestions-btn">生成错词建议</button>
+                        <button class="btn btn-secondary" id="generate-voiceover-suggestions-btn">生成口播优化（讲解风格）</button>
+                        <button class="btn btn-success" id="save-captions-btn">保存字幕</button>
+                    </div>
+                </div>
+                <div id="captions-stage-indicator" class="field-note">当前显示：自动选择字幕版本</div>
+                <div class="action-buttons" style="margin:10px 0 5px;">
+                    <button class="btn btn-secondary caption-stage-btn" data-stage="auto">当前字幕</button>
+                    <button class="btn btn-secondary caption-stage-btn" data-stage="source">原始字幕</button>
+                </div>
+                <div id="cut-marks-indicator" class="field-note" style="color:#e65100;">已标记删除：0 条</div>
+                <div id="suggestions-container" class="hidden"></div>
+                <div id="voiceover-suggestions-container" class="hidden"></div>
+                <div id="captions-editor"></div>
+                <div class="action-buttons" style="margin-top:15px;">
+                    <button class="btn btn-warning" id="save-cut-marks-btn">保存裁剪标记</button>
+                    <button class="btn btn-secondary" id="clear-cut-marks-btn">清除标记</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>替换词库</h2>
+                <div class="form-row" style="margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>源文字（被替换）</label>
+                        <input type="text" id="term-source" placeholder="输入要替换的文字">
+                    </div>
+                    <div class="form-group">
+                        <label>目标文字（替换为）</label>
+                        <input type="text" id="term-target" placeholder="输入替换后的文字">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-primary" id="add-term-btn">添加</button>
+                    </div>
+                </div>
+                <div id="terms-container">
+                    <table id="terms-table">
+                        <thead>
+                            <tr>
+                                <th>源文字</th>
+                                <th>→</th>
+                                <th>目标文字</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>TTS 分段生成 <span class="field-note" style="font-weight:normal;">（自动从上方字幕编辑器关联）</span></h2>
+                <div class="help-panel" style="background:#e3f2fd; border-color:#90caf9; color:#1565c0;">
+                    <strong>说明：</strong>TTS 分段文本直接从字幕编辑器读取，无需手动生成分段数据。点击"重新生成"会使用当前字幕编辑器中的文本。
+                </div>
+                <div id="tts-segments-indicator" class="field-note">请先在字幕编辑器中保存字幕，然后切换到 TTS 页面生成配音。</div>
+                <div id="tts-segments-editor"></div>
+            </div>
+        </div>

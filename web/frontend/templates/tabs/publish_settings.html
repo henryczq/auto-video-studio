@@ -1,0 +1,80 @@
+<div class="card">
+    <h2>B站发布方式设置</h2>
+    <div class="help-panel">
+        选择 B站视频发布使用的底层工具。social-auto-upload 使用 biliup 命令行工具；bilibili-web-upload 使用浏览器网页投稿。
+    </div>
+    <div class="form-group">
+        <label>B站发布工具</label>
+        <select id="bilibili-provider">
+            <option value="social-auto-upload">social-auto-upload (biliup)</option>
+            <option value="bilibili-web-upload">bilibili-web-upload (网页登录投稿)</option>
+        </select>
+        <small style="color: #666;">切换后，B站登录和发布将使用对应的工具</small>
+    </div>
+    <div class="action-buttons">
+        <button class="btn btn-success" id="bilibili-provider-save-btn">保存设置</button>
+    </div>
+    <div id="bilibili-provider-result" style="margin-top: 15px;"></div>
+</div>
+
+<div class="card">
+    <h2>发布内容生成设置</h2>
+    <div class="help-panel">
+        配置 AI 生成视频标题、简介和标签的提示词。根据当前字幕自动生成适合各平台的发布内容。
+    </div>
+
+    <div class="form-group">
+        <label>启用模型</label>
+        <select id="publish-ai-model">
+            <option value="">使用 AI 配置中的启用模型</option>
+        </select>
+        <small style="color: #666;">选择用于生成发布内容的 AI 模型</small>
+    </div>
+
+    <div class="form-group">
+        <label>内容生成提示词</label>
+        <textarea id="publish-content-prompt" rows="12" placeholder="根据以下视频字幕，生成标题、简介和标签..."></textarea>
+        <small style="color: #666;">可用变量: {subtitles} - 视频字幕文本<br>
+        AI 需要返回 JSON 格式，包含 `recommended_style` 和 `versions.tutorial / hook / workplace` 三套结果</small>
+    </div>
+
+    <div class="form-group">
+        <label>默认标签（逗号分隔）</label>
+        <input type="text" id="publish-default-tags" placeholder="例如: 科技,教程,分享">
+        <small style="color: #666;">每个视频都会自动添加这些标签</small>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-success" id="publish-settings-save-btn">保存设置</button>
+        <button class="btn btn-secondary" id="publish-settings-reset-btn">恢复默认</button>
+    </div>
+    <div id="publish-settings-result" style="margin-top: 15px;"></div>
+</div>
+
+<div class="card">
+    <h2>错词检测提示词</h2>
+    <div class="help-panel">
+        配置 AI 检测字幕中错词和专有名词的提示词。
+    </div>
+    <div class="form-group">
+        <label>错词检测提示词</label>
+        <textarea id="ai-prompt-publish" rows="8"></textarea>
+    </div>
+    <div class="action-buttons">
+        <button class="btn btn-success" id="ai-save-prompt-btn">保存提示词</button>
+    </div>
+</div>
+
+<div class="card">
+    <h2>TTS 分段提示词</h2>
+    <div class="help-panel">
+        配置 AI 将字幕分段用于 TTS 朗读的提示词。
+    </div>
+    <div class="form-group">
+        <label>TTS 朗读分段提示词</label>
+        <textarea id="ai-tts-segment-prompt-publish" rows="8"></textarea>
+    </div>
+    <div class="action-buttons">
+        <button class="btn btn-success" id="ai-save-tts-prompt-btn">保存提示词</button>
+    </div>
+</div>

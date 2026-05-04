@@ -1,0 +1,155 @@
+<div class="card">
+    <h2>TTS 配置管理</h2>
+    <div class="help-panel">
+        这里管理 TTS 的默认值、提示词预设、运行环境和模式映射。保存后，TTS 页面会按这份 JSON 动态加载。
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>默认提供商</label>
+            <input type="text" id="tts-settings-default-provider" placeholder="cosyvoice / indextts2">
+        </div>
+        <div class="form-group">
+            <label>默认运行环境</label>
+            <input type="text" id="tts-settings-default-runtime-env" placeholder="例如 rocm6.3">
+        </div>
+        <div class="form-group">
+            <label>默认模式</label>
+            <input type="text" id="tts-settings-default-mode" placeholder="例如 instruct2">
+        </div>
+        <div class="form-group">
+            <label>默认模型</label>
+            <input type="text" id="tts-settings-default-model" placeholder="例如 Fun-CosyVoice3-0.5B-2512_RL">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>默认 Device</label>
+            <input type="text" id="tts-settings-default-device" placeholder="rocm">
+        </div>
+        <div class="form-group">
+            <label>默认 gfx 覆盖</label>
+            <input type="text" id="tts-settings-default-gfx" placeholder="例如 11.0.0，可留空">
+        </div>
+        <div class="form-group">
+            <label title="单个常驻 TTS 模型进程内部可使用的 CPU 线程数">线程数</label>
+            <input type="number" id="tts-settings-default-threads" min="1" step="1">
+        </div>
+        <div class="form-group">
+            <label>默认模式</label>
+            <select id="tts-settings-default-executor">
+                <option value="batched">省显存：单模型</option>
+                <option value="workers">极速：多 worker</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label title="省显存模式下是 batch size；极速模式下是 worker 数">默认数量</label>
+            <input type="number" id="tts-settings-default-parallel" min="1" step="1">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>默认 Prompt 文本</label>
+        <textarea id="tts-settings-default-prompt-text" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label>CosyVoice 默认风格提示词</label>
+        <textarea id="tts-settings-default-cosy-style" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label>IndexTTS2 默认情感提示词</label>
+        <textarea id="tts-settings-default-indextts-emo" rows="3"></textarea>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-success" id="tts-settings-save-btn">保存配置</button>
+        <button class="btn btn-secondary" id="tts-settings-validate-btn">校验配置</button>
+        <button class="btn btn-warning" id="tts-settings-reload-btn">重新加载</button>
+        <button class="btn btn-danger" id="tts-settings-reset-btn">恢复默认</button>
+    </div>
+    <div id="tts-settings-result" style="margin-top: 15px;"></div>
+</div>
+
+<div class="card">
+    <h2>提示词预设</h2>
+    <div class="help-panel">
+        用于前台 TTS 页面“提示词预设”下拉框。可新增、删除、修改。
+    </div>
+    <div class="action-buttons">
+        <button class="btn btn-primary" id="tts-settings-add-preset-btn" type="button">新增预设</button>
+    </div>
+    <div class="table-scroll">
+        <table id="tts-settings-presets-table">
+            <thead>
+                <tr>
+                    <th style="width: 180px;">预设键名</th>
+                    <th>提示词内容</th>
+                    <th style="width: 90px;">操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h2>运行环境</h2>
+    <div class="help-panel">
+        每个提供商可以维护自己的环境列表。这里控制 Python 路径、标签、默认 gfx 覆盖。
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>新增环境所属 Provider</label>
+            <select id="tts-settings-runtime-provider">
+                <option value="cosyvoice">cosyvoice</option>
+                <option value="indextts2">indextts2</option>
+            </select>
+        </div>
+        <div class="form-group" style="display:flex; align-items:flex-end;">
+            <button class="btn btn-primary" id="tts-settings-add-runtime-btn" type="button">新增环境</button>
+        </div>
+    </div>
+    <div id="tts-settings-runtime-groups"></div>
+</div>
+
+<div class="card">
+    <h2>Provider 默认值</h2>
+    <div class="help-panel">
+        这里定义每个 TTS 提供商默认使用的运行环境和 gfx 覆盖。模式没有单独指定时，会退回到这里。
+    </div>
+    <div id="tts-settings-provider-defaults"></div>
+</div>
+
+<div class="card">
+    <h2>模式默认映射</h2>
+    <div class="help-panel">
+        这里定义 provider + mode 对应的默认运行环境和 gfx 覆盖。切换模式时会从这里自动取值。
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>新增模式所属 Provider</label>
+            <select id="tts-settings-mode-provider">
+                <option value="cosyvoice">cosyvoice</option>
+                <option value="indextts2">indextts2</option>
+            </select>
+        </div>
+        <div class="form-group" style="display:flex; align-items:flex-end;">
+            <button class="btn btn-primary" id="tts-settings-add-mode-btn" type="button">新增模式映射</button>
+        </div>
+    </div>
+    <div id="tts-settings-mode-groups"></div>
+</div>
+
+<div class="card">
+    <h2>原始 JSON</h2>
+    <div class="help-panel">
+        这里显示完整配置快照，便于整体查看和备份。点击“从表单同步”会把上面所有编辑内容写回这里。
+    </div>
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="tts-settings-sync-json-btn" type="button">从表单同步</button>
+    </div>
+    <div class="form-group" style="margin-top: 15px;">
+        <textarea id="tts-settings-json" rows="22" spellcheck="false"></textarea>
+    </div>
+</div>

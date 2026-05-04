@@ -1,0 +1,59 @@
+<div class="card">
+    <h2>社媒发布日志</h2>
+    <div class="form-row" style="margin-bottom: 15px;">
+        <div class="form-group">
+            <label>平台筛选</label>
+            <select id="log-platform-filter">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>状态筛选</label>
+            <select id="log-status-filter">
+                <option value="">全部</option>
+                <option value="success">成功</option>
+                <option value="failed">失败</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>时间范围</label>
+            <select id="log-time-filter">
+                <option value="">全部</option>
+                <option value="today">今天</option>
+                <option value="week">本周</option>
+                <option value="month">本月</option>
+            </select>
+        </div>
+        <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button class="btn btn-secondary" id="refresh-logs-btn">刷新</button>
+        </div>
+    </div>
+    <div class="table-scroll">
+        <table id="upload-logs-table">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>任务</th>
+                    <th>平台</th>
+                    <th>账号</th>
+                    <th>标题</th>
+                    <th>状态</th>
+                    <th>原因摘要</th>
+                    <th>链接</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h2>日志详情</h2>
+    <div class="form-group">
+        <select id="log-detail-select" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;">
+            <option value="">选择一条日志查看详情</option>
+        </select>
+    </div>
+    <div id="log-detail-content" class="log-viewer" style="max-height: 400px;"></div>
+</div>

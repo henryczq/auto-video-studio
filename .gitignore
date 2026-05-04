@@ -1,0 +1,107 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Linting
+.ruff_cache/
+.mypy_cache/
+
+# Data and logs
+data/
+logs/
+videos/
+*.db
+*.log
+*.pid
+
+# Docs (excluded as requested)
+docs/
+
+# Credentials and sensitive data
+config/bilibili_aio_credentials/
+config/bilibili_aio_browser_profiles/
+config/social_upload_accounts.json
+*.credentials
+
+# Third-party models (large files, git repos)
+core/third_party/CosyVoice/
+core/third_party/index-tts/
+core/tools/seed-vc/
+
+# Wheel cache
+core/.wheelhouse-*/
+
+# Model checkpoints and cache
+checkpoints/
+
+# Browser profiles (sensitive data)
+publish/social-auto-upload/browser_profiles/
+
+# Node modules
+.kilo/
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Video and audio outputs (generated)
+*.mp4
+*.wav
+*.mp3
+!videos/.gitkeep
+
+# Keep screenshots for README
+!images/
+
+# Publish temp
+publish/bilibili-web-upload/.venv/
+
+# Codex
+.codex
+
+# Skills
+skills/

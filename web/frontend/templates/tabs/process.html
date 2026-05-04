@@ -1,0 +1,79 @@
+        <div id="tab-process" class="tab-content">
+            <div class="card">
+                <h2>视频处理参数</h2>
+                <form id="process-form">
+                    <input type="hidden" id="process-job-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="说话片段前后保留的秒数，裁剪后会保留这么多缓冲">margin (秒) 🔊</label>
+                            <input type="number" id="margin" value="3.0" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label title="FFmpeg 检测静音的阈值(dB)，越小越敏感，-35dB 适合一般录音">silence-noise (dB) 🔇</label>
+                            <input type="text" id="silence-noise" value="-35dB">
+                        </div>
+                        <div class="form-group">
+                            <label title="超过多少秒的静音才进行二次压缩">silence-min-duration (秒)</label>
+                            <input type="number" id="silence-min-duration" value="5.0" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label title="每段长静音最多保留多少秒作为过渡">silence-keep (秒)</label>
+                            <input type="number" id="silence-keep" value="1.0" step="0.1" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="Whisper 语音识别模型，越大越准确但越慢：tiny最快最不准，medium最准最慢">Whisper 模型 🎯</label>
+                            <select id="model">
+                                <option value="tiny">tiny (最快)</option>
+                                <option value="base">base (推荐)</option>
+                                <option value="small">small (较准)</option>
+                                <option value="medium" selected>medium (最准)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="推理设备：CPU 通用，CUDA 需要 NVIDIA，ROCM 需要 AMD 显卡">设备 ⚡</label>
+                            <select id="device">
+                                <option value="cpu">CPU</option>
+                                <option value="cuda">CUDA (NVIDIA)</option>
+                                <option value="rocm" selected>ROCM (AMD)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="AMD 显卡 ROCm 兼容层版本。多数情况下应留空，只有确实需要兼容覆盖时再填写。">ROCm GFX</label>
+                            <input type="text" id="rocm-gfx-override" value="" placeholder="留空；必要时再填，如 11.0.0">
+                            <div class="field-note">留空时不会下发 HSA_OVERRIDE_GFX_VERSION。只有显卡确实需要兼容覆盖时再填写。</div>
+                        </div>
+                    </div>
+                    <div class="help-panel">
+                        <h3>参数说明</h3>
+                        <ul>
+                            <li><strong>margin</strong>：裁剪时在检测到的人声片段前后额外保留的秒数，越大越不容易切掉开头/结尾，但成片会更长。</li>
+                            <li><strong>silence-noise</strong>：FFmpeg 判定静音的音量阈值，例如 -35dB；数值越接近 0 越严格，只把更安静的部分当静音。</li>
+                            <li><strong>silence-min-duration</strong>：静音持续超过多少秒才会被压缩，用来保留短暂停顿、压掉长空白。</li>
+                            <li><strong>silence-keep</strong>：每段被压缩的长静音最终保留多少秒，让转场不至于太突兀。</li>
+                            <li><strong>Whisper 模型</strong>：模型越大识别通常越准、速度越慢；带"已下载"的模型可以直接使用，未下载会在首次运行时下载。</li>
+                            <li><strong>设备 / ROCm GFX</strong>：ROCm 用 AMD 显卡加速；ROCm GFX 会作为 HSA_OVERRIDE_GFX_VERSION 传给处理命令。</li>
+                        </ul>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">开始处理</button>
+                        <button type="button" class="btn btn-success" id="full-pipeline-btn">一键生成最终视频</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>处理结果</h2>
+                <div id="process-result"></div>
+                <div id="process-video-preview" style="margin-top:15px;"></div>
+                <div id="process-log-panel" style="margin-top:15px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                        <h3 style="margin:0;">实时处理日志</h3>
+                        <button type="button" class="btn btn-secondary btn-sm" id="refresh-process-log-btn">刷新日志</button>
+                    </div>
+                    <div class="field-note" style="margin:8px 0;">处理进行中时，这里会显示当前任务的 process.log，便于观察 Whisper、ffmpeg 和裁剪进度。</div>
+                    <pre id="process-log-viewer" style="max-height:360px; overflow:auto; background:#0f172a; color:#dbeafe; padding:12px; border-radius:8px; white-space:pre-wrap; word-break:break-word;">请选择任务后开始处理。</pre>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,167 @@
+        <div id="tab-tts" class="tab-content">
+            <div class="card">
+                <h2>TTS 参数</h2>
+                <form id="tts-form">
+                    <input type="hidden" id="tts-job-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="选择当前 TTS Provider。CosyVoice 是现有默认路线；IndexTTS2 是新接入的中文克隆实验路线">TTS 引擎 🧠</label>
+                            <select id="tts-provider">
+                                <option value="cosyvoice" selected>CosyVoice（默认）</option>
+                                <option value="indextts2">IndexTTS2（中文克隆实验）</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="tts-runtime-env-group" style="display:none;">
+                            <label title="仅对 IndexTTS2 生效。选择底层 Python/ROCm 运行环境">运行环境 🧪</label>
+                            <select id="tts-runtime-env">
+                                <option value="rocm7.12">rocm7.12 原生 gfx1150</option>
+                                <option value="rocm6.3" selected>rocm6.3 + gfx 11.0.0</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="当前默认推荐 instruct2：保留参考音色，同时用提示词增强短视频解说感；cross_lingual 更偏保真；zero_shot 保留作可选实验模式">TTS 模式 🎯</label>
+                            <select id="tts-mode">
+                                <option value="instruct2" selected>instruct2（默认，情感增强版）</option>
+                                <option value="cross_lingual">cross_lingual（更像原声）</option>
+                                <option value="zero_shot">zero_shot（可选，中文克隆实验）</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="CosyVoice 模型版本">模型 📦</label>
+                            <select id="tts-model">
+                                <option value="Fun-CosyVoice3-0.5B-2512">Fun-CosyVoice3-0.5B-2512</option>
+                                <option value="Fun-CosyVoice3-0.5B-2512_RL" selected>Fun-CosyVoice3-0.5B-2512_RL</option>
+                                <option value="CosyVoice2-0.5B">CosyVoice2-0.5B</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="当前 TTS 实际加载的模型目录">模型目录 📁</label>
+                            <input type="text" id="tts-model-dir" value="third_party/CosyVoice/pretrained_models/Fun-CosyVoice3-0.5B-2512_RL">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="用于克隆音色的参考音频，建议选5-10秒清晰人声，纯语音无背景音">Prompt 音频 🎙️</label>
+                            <input type="text" id="prompt-wav" value="config/tts_prompt_reference_kooha_20260410.wav">
+                        </div>
+                        <div class="form-group" id="prompt-text-group">
+                            <label title="参考音频对应的文字。zero_shot 模式下建议填写与音频一致的内容；不填时系统会自动识别参考音频。">Prompt 文本 📝</label>
+                            <input type="text" id="prompt-text" value="各位朋友大家好，我是振振公子，今天我来演示一下利用" placeholder="建议填写与参考音频一致的文本；留空时自动识别">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button type="button" class="btn btn-secondary" id="verify-prompt-btn">校验参考音频</button>
+                        </div>
+                    </div>
+                    <div class="help-panel" id="tts-mode-help">
+                        <strong>CosyVoice3 instruct2 模式：</strong>当前默认推荐。保留参考音色，同时使用风格/情绪提示词增强短视频解说感，适合你当前喜欢的效果。
+                    </div>
+                    <div class="form-row" id="indextts2-emo-row">
+                        <div class="form-group">
+                            <label title="可快速切换常用提示词模板，再继续手动修改">提示词预设 ✨</label>
+                            <select id="tts-emo-preset">
+                                <option value="short_video" selected>短视频解说</option>
+                                <option value="natural">自然讲解</option>
+                                <option value="excited">更兴奋抓人</option>
+                                <option value="calm">克制教程风</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="CosyVoice instruct2 和 IndexTTS2 都可用。可用自然语言描述语气、情绪、节奏、普通话标准度等">风格/情绪提示词 🎭</label>
+                            <input type="text" id="tts-emo-text" value="请用更清晰、更有节奏、略带惊讶和强调重点的中文短视频解说语气来读，普通话更标准一些，语速自然，不要过度夸张。" placeholder="例如：语气自然清晰，略带惊喜感，像在给朋友演示一个实用技巧">
+                        </div>
+                        <div class="form-group">
+                            <label title="当前主要对 IndexTTS2 生效。CosyVoice instruct2 更主要依赖提示词文本本身">情绪强度</label>
+                            <input type="number" id="tts-emo-alpha" value="0.6" step="0.1" min="0.0" max="1.0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="AI 分段会调用当前启用的 AI 模型，生成更自然的 TTS 长句；规则模式只按本地规则合并">TTS 断句 ✂️</label>
+                            <select id="tts-segment-mode">
+                                <option value="ai" selected>ai（默认，使用已启用模型）</option>
+                                <option value="rule">rule（仅本地规则）</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="CosyVoice 生成语音的速度，1.0 为原速">语速 🔊</label>
+                            <input type="number" id="speed" value="1.0" step="0.1" min="0.5" max="2.0">
+                        </div>
+                        <div class="form-group">
+                            <label title="生成音频超长时最多加速多少倍，防止字幕跟不上">最大加速 ⚡</label>
+                            <input type="number" id="max-speedup" value="1.10" step="0.1" min="1.0" max="2.0">
+                        </div>
+                        <div class="form-group">
+                            <label title="AMD 显卡 ROCm 兼容层版本。多数情况下应留空，只有确实需要兼容覆盖时再填写。">ROCm GFX</label>
+                            <input type="text" id="tts-rocm-gfx" value="" placeholder="留空；必要时再填，如 11.0.0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label title="单个常驻 TTS 模型进程内部可使用的 CPU 线程数">Threads 🧵</label>
+                            <input type="number" id="tts-threads" value="4" min="1" max="32">
+                        </div>
+                        <div class="form-group">
+                            <label title="省显存只加载一次权重；极速会启动多个 worker，每个 worker 各自加载权重">模式</label>
+                            <select id="tts-executor">
+                                <option value="batched">省显存：单模型</option>
+                                <option value="workers" selected>极速：多 worker</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label id="tts-parallel-label" title="省显存模式下是单模型合批一次处理的字幕块数；极速模式下是 worker 数">同时处理块数 📦</label>
+                            <input type="number" id="tts-parallel" value="2" min="1" max="8">
+                            <div class="field-note" id="tts-parallel-note">只加载一次权重；数值是 batch size。</div>
+                        </div>
+                        <div class="form-group">
+                            <label title="续跑缺失分块会保留已生成的 chunk；覆盖重做会删除并重新生成全部 chunk">生成策略</label>
+                            <select id="tts-reuse-chunks">
+                                <option value="true" selected>续跑缺失分块</option>
+                                <option value="false">覆盖重做全部分块</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label title="单批合成最多等待多少秒。长文本或合批较慢时建议 1200">单批超时 ⏱️</label>
+                            <input type="number" id="tts-serial-timeout" value="1200" min="30" max="2400" step="30">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>合成倍速</label>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <input type="range" id="tts-compose-playback-rate" min="0.8" max="1.5" step="0.05" value="1" style="flex:1;">
+                                <strong id="tts-compose-playback-rate-value" style="min-width:54px; text-align:right;">1.00x</strong>
+                            </div>
+                            <div class="field-note">用于下方“合成(替换音频)”和“合成(仅字幕)”，会同时调整视频、音频和字幕时间轴。</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary" name="action" value="generate" title="根据当前字幕生成整条配音音频 voiceover.wav">生成 TTS</button>
+                        <button type="submit" class="btn btn-success" name="action" value="compose-replace" title="把生成好的配音替换进视频，并叠加当前字幕">合成(替换音频)</button>
+                        <button type="submit" class="btn btn-success" name="action" value="compose-subtitles" title="保留原视频音轨，只叠加当前字幕导出">合成(仅字幕)</button>
+                    </div>
+                    <div class="help-panel">
+                        <h3>三个按钮分别做什么</h3>
+                        <ul>
+                            <li><strong>生成 TTS：</strong>读取下方展示的字幕文件，按分段生成配音，输出 `voiceover.wav`。</li>
+                            <li><strong>合成(替换音频)：</strong>使用已经生成好的配音替换下方展示的视频音频，并烧录对应字幕，输出配音版成片。</li>
+                            <li><strong>合成(仅字幕)：</strong>不替换原音频，只给下方展示的视频加对应字幕，输出字幕版成片。</li>
+                        </ul>
+                        <div class="field-note">点击后会先提交后台任务，状态会在下方“结果”和“日志”区域持续更新；如果字幕还没保存，系统会优先尝试从当前编辑字幕生成可用字幕文件。</div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>TTS 与合成结果</h2>
+                <div id="tts-result"></div>
+            </div>
+
+            <div class="card">
+                <h2>日志</h2>
+                <div id="log-viewer" class="log-viewer"></div>
+            </div>
+        </div>

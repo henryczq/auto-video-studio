@@ -1,0 +1,28 @@
+<div id="tab-settings" class="tab-content">
+    <div class="settings-shell">
+        <aside class="settings-sidebar">
+            <button type="button" class="settings-nav-item active" data-settings-panel="logs">操作日志</button>
+            <button type="button" class="settings-nav-item" data-settings-panel="publish-settings">发布设置</button>
+            <button type="button" class="settings-nav-item" data-settings-panel="tts-settings">TTS 配置</button>
+            <button type="button" class="settings-nav-item" data-settings-panel="ai">AI 配置</button>
+            <button type="button" class="settings-nav-item" data-settings-panel="operation-manual">操作说明</button>
+        </aside>
+        <section class="settings-main">
+            <div class="settings-panel active" id="settings-panel-logs">
+                {% include "tabs/logs.html" %}
+            </div>
+            <div class="settings-panel" id="settings-panel-publish-settings">
+                {% include "tabs/publish_settings.html" %}
+            </div>
+            <div class="settings-panel" id="settings-panel-tts-settings">
+                {% include "tabs/tts_settings.html" %}
+            </div>
+            <div class="settings-panel" id="settings-panel-ai">
+                {% include "tabs/ai.html" %}
+            </div>
+            <div class="settings-panel" id="settings-panel-operation-manual">
+                {% include "tabs/operation_manual.html" %}
+            </div>
+        </section>
+    </div>
+</div>

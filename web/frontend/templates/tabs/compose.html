@@ -1,0 +1,94 @@
+        <div id="tab-compose" class="tab-content">
+            <div class="card">
+                <h2>视频合成（原声路线）</h2>
+                <div class="help-panel" style="background:#e3f2fd; border-color:#90caf9;">
+                    <strong>原声路线：</strong>视频处理 → 字幕编辑 → 视频裁剪（可选）→ 声音优化（可选）→ 视频合成<br>
+                    <strong>说明：</strong>将当前视频版本与当前字幕烧录为字幕版视频。可以保留原视频声音，也可以替换为优化后的声音。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>选择任务</label>
+                        <select id="compose-job-select"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>当前版本信息</h3>
+                <div id="compose-source-info">
+                    <table style="width:auto; border:none;">
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>视频版本：</strong></td><td id="compose-video-label" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>字幕版本：</strong></td><td id="compose-captions-label" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>声音优化：</strong></td><td id="compose-audio-label" style="padding:5px 0;">-</td></tr>
+                        <tr><td style="padding:5px 15px 5px 0;"><strong>输出文件：</strong></td><td style="padding:5px 0;">final.subtitles.video.mp4</td></tr>
+                    </table>
+                </div>
+                <div id="compose-video-preview" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="card">
+                <h3>声音优化（可选）</h3>
+                <div class="help-panel">
+                    先试听原声；需要更干净、更稳定的人声时，再生成优化后的声音。合成时可以随时切回原视频声音。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>优化方案</label>
+                        <select id="audio-opt-preset">
+                            <option value="voice_light">轻度人声增强（推荐，接近刚才试听效果）</option>
+                            <option value="voice_strong">强力清晰化（更亮，但可能不自然）</option>
+                            <option value="custom">自定义滤镜组合</option>
+                        </select>
+                        <div class="field-note">推荐先用“轻度人声增强”。生成后可在下方试听，再决定合成时是否使用优化后声音。</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label style="margin-right:18px;">
+                        <input type="checkbox" id="audio-opt-denoise" checked>
+                        降噪
+                    </label>
+                    <label style="margin-right:18px;">
+                        <input type="checkbox" id="audio-opt-loudnorm" checked>
+                        响度标准化
+                    </label>
+                    <label style="margin-right:18px;">
+                        <input type="checkbox" id="audio-opt-compressor" checked>
+                        压缩/限幅
+                    </label>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="audio-optimize-btn">生成优化声音</button>
+                </div>
+                <div id="audio-optimize-preview" style="margin-top:15px;"></div>
+                <div id="audio-optimize-result" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="card">
+                <h3>合成声音</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>最终视频使用</label>
+                        <select id="compose-audio-mode">
+                            <option value="original">原视频声音</option>
+                            <option value="optimized">优化后声音</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>合成倍速</label>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <input type="range" id="compose-playback-rate" min="0.8" max="1.5" step="0.05" value="1" style="flex:1;">
+                            <strong id="compose-playback-rate-value" style="min-width:54px; text-align:right;">1.00x</strong>
+                        </div>
+                        <div class="field-note">会同时调整视频、音频和字幕时间轴。建议先在“视频裁剪”页试听，确认后再合成。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="compose-refresh-btn">刷新信息</button>
+                <button class="btn btn-success" id="compose-execute-btn">生成字幕版视频</button>
+            </div>
+            <div id="compose-result" style="margin-top:15px;"></div>
+        </div>

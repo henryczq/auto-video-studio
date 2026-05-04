@@ -1,0 +1,196 @@
+<div id="tab-social" class="tab-content">
+            <div class="card">
+                <h2>上传工具状态</h2>
+                <div id="social-cli-status">
+                    <button class="btn btn-secondary" id="check-cli-btn">检测 CLI</button>
+                    <div id="cli-status-result" style="margin-top: 10px;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                    <h2 style="margin:0;">上传账号</h2>
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-secondary" id="check-all-accounts-btn">一键检查</button>
+                        <span id="check-all-accounts-status" class="field-note"></span>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>扫码添加</label>
+                        <select id="social-qr-platform"></select>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-primary" id="qr-add-account-btn">扫码添加</button>
+                    </div>
+                    <div class="form-group">
+                        <label>网页登录</label>
+                        <select id="social-bridge-platform"></select>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-secondary" id="bridge-add-account-btn">网页登录</button>
+                    </div>
+                </div>
+                <div class="field-note" style="margin-bottom: 12px;">不再提供手动录入账号。扫码添加会在登录成功后再保存；网页登录支持抖音/快手/小红书浏览器登录，以及视频号/百家号/TikTok 桥接登录。</div>
+                <div id="qr-recovery-panel" class="help-panel" style="display:none; background:#fff7ed; border-color:#fdba74; color:#9a3412;">
+                    <h3 style="color:#c2410c;">待回填登录</h3>
+                    <div id="qr-recovery-list"></div>
+                </div>
+                <table id="accounts-table">
+                    <thead>
+                        <tr>
+                            <th>平台</th>
+                            <th>账号名</th>
+                            <th>备注</th>
+                            <th>状态</th>
+                            <th>最后检测</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="social-creator-links" style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+            </div>
+
+            <div class="card">
+                <h2>发布视频</h2>
+                <div class="help-panel" style="background: #fff3cd; border-color: #ffc107;">
+                    <strong>注意：</strong>当前上传工具主线 CLI 暂不支持统一草稿箱模式，本页操作会提交发布或定时发布，请确认后再执行。
+                </div>
+                <div class="help-panel" style="background:#eff6ff; border-color:#93c5fd; color:#1d4ed8;">
+                    <strong>补充：</strong>抖音、快手、小红书可从上方 <code>网页登录</code> 发起浏览器登录；视频号、百家号、TikTok 可从账号行里点 <code>网页登录</code> 发起桥接操作，发布区会显示 <code>桥接发布</code>。
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>选择任务</label>
+                        <select id="upload-job-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>视频版本</label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <select id="upload-video-type" class="video-type-select">
+                                <option value="final_replace_audio_subtitled">TTS 与合成 - 带配音+字幕</option>
+                                <option value="final_subtitles_video">视频合成（原声路线）- 原声字幕版</option>
+                                <option value="processed">视频处理 - 原处理视频</option>
+                            </select>
+                            <span id="upload-video-type-badge" style="display:none; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap;"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>发布账号</label>
+                        <select id="upload-account-select" multiple size="12" style="min-height: 260px;"></select>
+                        <div class="field-note">可按住 Ctrl 或 Shift 多选账号。批量发布会按选中的账号顺序依次启动。</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                            <span>标题</span>
+                            <small id="upload-title-count" style="color:#64748b; font-weight:normal;">0 字</small>
+                        </label>
+                        <input type="text" id="upload-title" placeholder="视频标题">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label>简介</label>
+                        <textarea id="upload-desc" placeholder="视频简介" style="min-height: 96px;"></textarea>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-primary" id="generate-content-btn">📝 一键生成标题和内容</button>
+                    </div>
+                </div>
+                <div id="publish-content-variants" class="help-panel" style="display:none; background:#f8fafc; border-color:#cbd5e1;">
+                    <h3 style="margin-top:0;">候选版本</h3>
+                    <div id="publish-content-variant-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>标签（逗号分隔）</label>
+                        <input type="text" id="upload-tags" placeholder="标签1,标签2,标签3">
+                        <div class="field-note" id="upload-tags-note">不同平台对标签要求不同；如果当前平台不需要标签，填写后也会自动忽略。</div>
+                    </div>
+                    <div class="form-group">
+                        <label>发布方式</label>
+                        <select id="upload-mode">
+                            <option value="">立即发布</option>
+                            <option value="schedule">定时发布</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="schedule-time-group" style="display: none;">
+                        <label>定时时间</label>
+                        <input type="datetime-local" id="upload-schedule">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>封面图</label>
+                        <div style="display:grid; grid-template-columns:minmax(260px, 420px) minmax(260px, 1fr); gap:14px; align-items:start;">
+                            <div>
+                                <input type="text" id="upload-thumbnail" placeholder="可选，如 publish_cover.jpg 或 /abs/path/cover.png">
+                                <input type="file" id="upload-thumbnail-file" accept="image/*" style="display:none;">
+                                <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                                    <input type="text" id="upload-thumbnail-time" placeholder="时间点，如 0:03 或 3.5" style="flex:1; min-width:150px;">
+                                    <button class="btn btn-secondary" type="button" id="generate-cover-btn">按时间截封面</button>
+                                    <button class="btn btn-secondary" type="button" id="use-current-frame-btn">用当前画面</button>
+                                    <button class="btn btn-secondary" type="button" id="upload-cover-file-btn">上传封面</button>
+                                </div>
+                                <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                                    <input type="text" id="upload-thumbnail-text" placeholder="封面大字，如：飞书自动提醒待办" style="flex:1; min-width:220px;">
+                                    <select id="upload-thumbnail-font-size" style="width:90px;">
+                                        <option value="small">小字号</option>
+                                        <option value="medium" selected>中字号</option>
+                                        <option value="large">大字号</option>
+                                        <option value="xlarge">特大</option>
+                                    </select>
+                                    <input type="color" id="upload-thumbnail-font-color" value="#ffffff" title="文字颜色" style="width:40px; height:36px; cursor:pointer;">
+                                    <button class="btn btn-secondary" type="button" id="generate-text-cover-btn">生成文字封面</button>
+                                </div>
+                                <div class="field-note">发布时会自动传给上传工具的 <code>--thumbnail</code>。支持任务目录内相对路径。</div>
+                                <div id="upload-thumbnail-preview" style="margin-top:8px;"></div>
+                            </div>
+                            <div id="upload-cover-video-picker"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- AI 封面生成区域 -->
+                <div class="form-row" id="ai-cover-section">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>AI 生成封面</span>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn btn-secondary" type="button" id="generate-gemini-pw-btn" title="使用 Gemini (Playwright) 生成封面" style="background:#9333ea; border-color:#9333ea;">
+                                    Gemini (PW)
+                                </button>
+                                <button class="btn btn-primary" type="button" id="generate-chatgpt-pw-btn" title="使用 ChatGPT (Playwright) 生成封面" style="background:#14b8a6; border-color:#14b8a6;">
+                                    ChatGPT (PW)
+                                </button>
+                            </div>
+                        </label>
+                        <div class="help-panel" style="background:#f0fdf4; border-color:#86efac; color:#166534;">
+                            使用 AI 生成封面图，请先在打开的浏览器中登录对应平台。</div>
+                        <div id="ai-cover-images" style="margin-top:8px;"></div>
+                    </div>
+                </div>
+                <div class="form-row" id="bilibili-tid-group" style="display: none;">
+                    <div class="form-group">
+                        <label>Bilibili 分区</label>
+                        <select id="upload-tid"></select>
+                    </div>
+                </div>
+                <div class="action-buttons" style="margin-top: 15px;">
+                    <button class="btn btn-secondary" id="save-publish-draft-btn">保存发布内容</button>
+                    <button class="btn btn-secondary" id="preview-upload-btn">上传视频(预览发布页)</button>
+                    <button class="btn btn-success" id="upload-video-btn">检查并发布</button>
+                </div>
+                <div class="field-note" style="margin-top:8px;">
+                    <strong>说明：</strong>点击"上传视频(预览发布页)"会打开发布页面并填充内容，停在发布确认页，你可以检查效果后手动点击发布。
+                </div>
+                <div id="upload-result" style="margin-top: 15px;"></div>
+                <div class="log-viewer" id="upload-log-viewer" style="margin-top: 10px; display: none;"></div>
+                <div id="upload-log-detail" style="margin-top: 10px; display: none;">
+                    <h4 style="margin-bottom: 5px;">发布日志详情</h4>
+                    <pre id="upload-log-detail-content" class="log-viewer" style="max-height: 300px; overflow: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; white-space: pre-wrap;"></pre>
+                </div>
+            </div>
+        </div>
