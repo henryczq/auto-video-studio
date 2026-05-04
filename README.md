@@ -195,6 +195,51 @@ pip install -r requirements.txt
 | `AUTO_CUT_PYTHON` | Python 解释器路径 | 自动检测 |
 | `AUTO_CUT_MAX_BODY_SIZE` | 请求体最大大小 | `524288000` (500MB) |
 
+## Docker 部署
+
+### 快速启动
+
+```bash
+# 构建镜像
+./docker/deploy.sh build
+
+# 启动服务
+./docker/deploy.sh start
+
+# 查看日志
+./docker/deploy.sh logs
+
+# 停止服务
+./docker/deploy.sh stop
+```
+
+### GPU 版本
+
+```bash
+# 启动 GPU 版本（需要 NVIDIA Docker 支持）
+./docker/deploy.sh gpu
+```
+
+### 手动操作
+
+```bash
+# 使用 docker-compose
+cd docker
+docker-compose up -d
+
+# 或使用 docker build
+docker build -f docker/Dockerfile -t auto-video-studio .
+docker run -d -p 1894:1894 -v ./data:/app/data -v ./videos:/app/videos auto-video-studio
+```
+
+### 数据持久化
+
+| 容器路径 | 说明 |
+|----------|------|
+| `/app/data` | 数据库、配置文件 |
+| `/app/videos` | 视频任务目录 |
+| `/app/logs` | 日志文件 |
+
 ## 使用流程
 
 ### 推荐操作顺序

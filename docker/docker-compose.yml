@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  auto-video-studio:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: auto-video-studio:latest
+    container_name: auto-video-studio
+    restart: unless-stopped
+    ports:
+      - "1894:1894"
+    volumes:
+      - ../data:/app/data
+      - ../videos:/app/videos
+      - ../logs:/app/logs
+    environment:
+      - AUTO_CUT_HOST=0.0.0.0
+      - AUTO_CUT_PORT=1894
+      - AUTO_CUT_MAX_BODY_SIZE=524288000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1894/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  auto-video-studio-gpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gpu
+    image: auto-video-studio:gpu
+    container_name: auto-video-studio-gpu
+    restart: unless-stopped
+    ports:
+      - "1894:1894"
+    volumes:
+      - ../data:/app/data
+      - ../videos:/app/videos
+      - ../logs:/app/logs
+    environment:
+      - AUTO_CUT_HOST=0.0.0.0
+      - AUTO_CUT_PORT=1894
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    profiles:
+      - gpu
