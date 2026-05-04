@@ -157,6 +157,35 @@ python -m uvicorn app:app --host 127.0.0.1 --port 1894 --reload
 http://127.0.0.1:1894
 ```
 
+### 安装 TTS 模型（可选）
+
+如需使用语音克隆功能，需要单独安装第三方模型：
+
+**CosyVoice（推荐）**
+```bash
+cd core/third_party
+git clone https://github.com/FunAudioLLM/CosyVoice.git
+cd CosyVoice
+pip install -r requirements.txt
+# 下载预训练模型到 pretrained_models/ 目录
+```
+
+**IndexTTS2**
+```bash
+cd core/third_party
+git clone https://github.com/index-tts/index-tts.git
+cd index-tts
+pip install -e .
+```
+
+**Seed-VC（变声）**
+```bash
+cd core/tools
+git clone https://github.com/Plachtaa/seed-vc.git
+cd seed-vc
+pip install -r requirements.txt
+```
+
 ### 环境变量
 
 | 变量名 | 说明 | 默认值 |
