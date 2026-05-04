@@ -44,7 +44,7 @@ def run_cmd(cmd: list[str], cwd: Path | None = None) -> None:
 def load_prompt_text(args: argparse.Namespace) -> str:
     if args.prompt_text_file:
         return Path(args.prompt_text_file).read_text(encoding="utf-8").strip()
-    default_prompt_file = Path("config/cosyvoice_prompt_text.txt")
+    default_prompt_file = Path("data/cosyvoice_prompt_text.txt")
     if default_prompt_file.exists():
         return default_prompt_file.read_text(encoding="utf-8").strip()
     if args.prompt_text:

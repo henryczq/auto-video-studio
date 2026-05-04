@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-TERMS_FILE = Path(__file__).parent.parent.parent.parent / "config" / "replace_terms.json"
+TERMS_FILE = Path(__file__).parent.parent.parent.parent / "data" / "replace_terms.json"
 
 
 def load_terms() -> dict:
