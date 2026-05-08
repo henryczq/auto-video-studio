@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent
-SETTINGS_FILE = ROOT_DIR / "config" / "publish_settings.json"
+SETTINGS_FILE = ROOT_DIR / "data" / "publish_settings.json"
 
 DEFAULT_SETTINGS = {
     "content_prompt": """你是一名短视频运营策划。请根据以下视频字幕内容，生成适合短视频平台发布的标题、简介和标签。

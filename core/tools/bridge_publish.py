@@ -134,7 +134,7 @@ def resolve_job_output(job: dict, job_dir: Path, video_type: str) -> Path:
 
 
 def load_publish_draft(job_id: str) -> dict:
-    drafts_path = ROOT_DIR / "config" / "publish_drafts.json"
+    drafts_path = ROOT_DIR / "data" / "publish_drafts.json"
     if not drafts_path.exists():
         return {}
     try:
