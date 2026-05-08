@@ -65,7 +65,7 @@ def create_account(
     
     with get_cursor() as cursor:
         cursor.execute("""
-            INSERT INTO social_accounts (
+            INSERT OR REPLACE INTO social_accounts (
                 id, platform, account, label, last_check_status,
                 last_check_at, last_error, cookie_path, profile_dir,
                 created_at, updated_at
