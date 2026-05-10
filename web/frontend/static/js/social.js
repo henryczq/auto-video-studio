@@ -1113,7 +1113,12 @@ function applyPublishDraft(draft) {
     Object.entries(fieldMap).forEach(([key, elementId]) => {
         const el = document.getElementById(elementId);
         if (el && draft[key] !== undefined && draft[key] !== null) {
-            el.value = draft[key];
+            // 标签字段特殊处理：如果是数组则转为逗号分隔字符串
+            if (key === 'tags' && Array.isArray(draft[key])) {
+                el.value = draft[key].join(',');
+            } else {
+                el.value = draft[key];
+            }
         }
     });
     setSelectedUploadAccountIds(draft.account_ids || (draft.account_id ? [draft.account_id] : []));

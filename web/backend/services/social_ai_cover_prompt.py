@@ -17,7 +17,7 @@ def build_ai_cover_prompt(title: str, description: str = "") -> str:
         desc_part = ""
 
     return (
-        f"请为短视频生成一张竖屏封面图片（3:4比例），主题是：{title}。{desc_part}\n\n"
+        f"请为短视频生成一张竖屏封面图片（3:4比例），标题是：{title}。简介是：{desc_part}\n\n"
         f"封面目标：适合抖音/快手/视频号等手机信息流，第一眼能看懂主题，有点击欲望，但不要像固定模板。\n\n"
         f"文字要求：\n"
         f"1. 必须包含标题文字，文字内容不要改写：'{title}'\n"
