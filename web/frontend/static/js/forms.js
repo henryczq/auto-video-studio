@@ -363,6 +363,29 @@ document.getElementById('generate-voiceover-suggestions-btn')?.addEventListener(
     const btn = document.getElementById('generate-voiceover-suggestions-btn');
 
     try {
+        // 先自动保存当前字幕，避免读取到旧文件
+        try {
+            const rows = document.querySelectorAll('#captions-editor tr[data-index]');
+            const captions = [];
+            rows.forEach(row => {
+                const startInput = row.querySelector('[data-field="start"]');
+                const endInput = row.querySelector('[data-field="end"]');
+                const textInput = row.querySelector('[data-field="text"]');
+                if (startInput && endInput && textInput) {
+                    captions.push({
+                        start: parseEditorTimeValue(startInput.value),
+                        end: parseEditorTimeValue(endInput.value),
+                        text: textInput.value
+                    });
+                }
+            });
+            if (captions.length > 0) {
+                await api('POST', `/jobs/${jobId}/captions/final`, { captions });
+            }
+        } catch (saveErr) {
+            console.warn('自动保存字幕失败，继续生成口播优化:', saveErr);
+        }
+
         await window.apiAction({
             button: btn,
             loadingText: '生成中...',
