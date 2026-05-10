@@ -381,6 +381,8 @@ document.getElementById('generate-voiceover-suggestions-btn')?.addEventListener(
             });
             if (captions.length > 0) {
                 await api('POST', `/jobs/${jobId}/captions/final`, { captions });
+                // 短暂延迟确保文件系统写入完成
+                await new Promise(resolve => setTimeout(resolve, 200));
             }
         } catch (saveErr) {
             console.warn('自动保存字幕失败，继续生成口播优化:', saveErr);
